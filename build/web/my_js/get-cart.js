@@ -1,31 +1,31 @@
-async  function AddToCart(id) {
+async  function GetCart() {
 
-    const qty = document.getElementById("qty-cart");
-
-    const dto = {
-        qty: qty.innerHTML,
-        pid: id
-    };
-    console.log(JSON.stringify(dto));
-
-    const response = await fetch("AddToCart", {
-        method: "POST",
-        body: JSON.stringify(dto),
+    const response = await fetch("GetCart", {
         headers: {"Content-Type": "application/json"}
     });
     if (response.ok) {
         const json = await response.json();
         console.log(json.content);
         if (json.status) {
-            erroeSwal("Success", json.content, "success");
-
+           
+            console.log(json);
+            
+            json.content.forEach((item)=>{
+                
+                console.log(item);
+                
+                
+                
+                
+            });
+            
+            
         } else {
-            erroeSwal("Error", json.content, "error");
+           
         }
     } else {
         console.log("Error:", response.statusText);
     }
-
 
 }
 

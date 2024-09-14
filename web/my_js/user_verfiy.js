@@ -2,47 +2,34 @@ async  function UserVerfiy() {
 
     console.log("ok");
     const code = document.getElementById("code");
-
     if (!code.value.trim()) {
 
         erroeSwal("Error", "Enter your verification code!", "error");
-
         return;
     }
 
     const dto = {
         code: code.value
     };
-
     console.log(JSON.stringify(dto));
-
-    try {
-        const response = await fetch("User_Verfiy", {
-            method: "POST",
-            body: JSON.stringify(dto),
-            headers: {"Content-Type": "application/json"}
-        });
-
-        if (response.ok) {
-            const json = await response.json();
-            console.log(json.content);
-
-            if (json.status) {
-                console.log("Verfiy successful");
-                window.location = "index.html";
-            } else {
-
-                erroeSwal("Error", json.content, "error");
-
-            }
+    const response = await fetch("User_Verfiy", {
+        method: "POST",
+        body: JSON.stringify(dto),
+        headers: {"Content-Type": "application/json"}
+    });
+    if (response.ok) {
+        const json = await response.json();
+        console.log(json.content);
+        if (json.status) {
+            console.log("Verfiy successful");
+            window.location = "index.html";
         } else {
-            console.log("Error:", response.statusText);
+
+            erroeSwal("Error", json.content, "error");
         }
-
-    } catch (error) {
-        console.log("Fetch error:", error);
+    } else {
+        console.log("Error:", response.statusText);
     }
-
 
 
 }

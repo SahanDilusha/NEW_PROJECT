@@ -24,34 +24,32 @@ async  function UserLogin() {
         password: password.value
     };
     console.log(JSON.stringify(user_dto));
-    try {
-        const response = await fetch("User_Login", {
-            method: "POST",
-            body: JSON.stringify(user_dto),
-            headers: {"Content-Type": "application/json"}
-        });
-        if (response.ok) {
-            const json = await response.json();
-            console.log(json.content);
-            if (json.status) {
-                console.log("Login successful");
-                if (json.content === "1") {
-                    window.location = "new-user-varfiy.html";
-                } else {
-                    window.location = "index.html";
-                }
 
+    const response = await fetch("User_Login", {
+        method: "POST",
+        body: JSON.stringify(user_dto),
+        headers: {"Content-Type": "application/json"}
+    });
+    if (response.ok) {
+        const json = await response.json();
+        console.log(json.content);
+        if (json.status) {
+            console.log("Login successful");
+            if (json.content === "1") {
+                window.location = "new-user-varfiy.html";
             } else {
-                erroeSwal("Error", json.content, "error");
-
+                window.location = "index.html";
             }
-        } else {
-            console.log("Error:", response.statusText);
-        }
 
-    } catch (error) {
-        console.log("Fetch error:", error);
+        } else {
+            erroeSwal("Error", json.content, "error");
+
+        }
+    } else {
+        console.log("Error:", response.statusText);
     }
+
+
 
     function validateEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

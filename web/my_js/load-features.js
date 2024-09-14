@@ -4,7 +4,7 @@ async function LoadFeatures() {
     const main_category = document.getElementById("main_category");
     const condition_op = document.getElementById("condition_op");
     const brand = document.getElementById("brand");
-    try {
+
         const response = await fetch("LoadFeatures", {
             method: "POST",
             headers: {"Content-Type": "application/json"}
@@ -61,9 +61,6 @@ async function LoadFeatures() {
             console.log(response.statusText);
         }
 
-    } catch (e) {
-        console.log("Error: " + e);
-    }
 }
 
 function LoadSubCategory() {

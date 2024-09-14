@@ -2,7 +2,7 @@ async  function UserLogin() {
 
     const email = document.getElementById("email-login");
     const password = document.getElementById("password-login");
-    
+
     if (!email.value.trim()) {
         erroeSwal("Error", "Email is required.", "error");
         return;
@@ -42,7 +42,7 @@ async  function UserLogin() {
                 }
 
             } else {
-
+                erroeSwal("Error", json.content, "error");
 
             }
         } else {

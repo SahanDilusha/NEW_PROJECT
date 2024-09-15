@@ -116,7 +116,7 @@ public class AddToCart extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             response_DTO.setContent("Unable to process your request");
-        } 
+        }
 
     }
 }

@@ -4,7 +4,7 @@
 payhere.onCompleted = function onCompleted(orderId) {
     console.log("Payment completed. OrderID:" + orderId);
 
-    window.location = "thankyou.html";
+    window.location = "success.html";
 };
 
 // Payment window closed
@@ -118,8 +118,6 @@ async  function ChekcOut() {
             email: email.value.trim()
         };
 
-
-
         console.log("Form data is valid", billingDetails);
 
 
@@ -132,10 +130,18 @@ async  function ChekcOut() {
         if (response.ok) {
             const json = await response.json();
             console.log(json);
+
+            if (json.success) {
+                payhere.startPayment(json.payhereJson);
+            } else {
+
+                erroeSwal("Error", json.content, "error");
+            }
+
         } else {
 
 
-
+            erroeSwal("Error", "Try aging!", "error");
         }
 
     } else {
@@ -145,64 +151,64 @@ async  function ChekcOut() {
 
 async function getCheckoutData() {
 
-        const response = await fetch('CheckoutData');
+    const response = await fetch('CheckoutData');
 
-        if (response.ok) {
-            const data = await response.json();
+    if (response.ok) {
+        const data = await response.json();
 
-            if (data.status) {
+        if (data.status) {
 
-                const cart = data.cart;
-                const orBody = document.getElementById('or-body');
-                const templateRow = document.getElementById('template-row');
-                const templateTable = document.getElementById('template-table');
+            const cart = data.cart;
+            const orBody = document.getElementById('or-body');
+            const templateRow = document.getElementById('template-row');
+            const templateTable = document.getElementById('template-table');
 
-                let subtotal = 0;
-                let shipping = 0;
+            let subtotal = 0;
+            let shipping = 0;
 
-                cart.forEach(item => {
+            cart.forEach(item => {
 
-                    const newRow = templateRow.cloneNode(true);
+                const newRow = templateRow.cloneNode(true);
 
-                    newRow.querySelector('.product-thumbnail img').src = "product-images/" + item.pid + "/image1.png";
-                    newRow.querySelector('.product-name').textContent = item.title;
-                    newRow.querySelector('.product-qty').textContent = `x ${item.qty}`;
-                    newRow.querySelector('.product-total').textContent = `RS ${item.price * item.qty}`;
+                newRow.querySelector('.product-thumbnail img').src = "product-images/" + item.pid + "/image1.png";
+                newRow.querySelector('.product-name').textContent = item.title;
+                newRow.querySelector('.product-qty').textContent = `x ${item.qty}`;
+                newRow.querySelector('.product-total').textContent = `RS ${item.price * item.qty}`;
 
-                    subtotal += item.qty * item.price;
-                    shipping += item.qty * item.shipping;
-
-
-                    orBody.appendChild(newRow);
-                });
+                subtotal += item.qty * item.price;
+                shipping += item.qty * item.shipping;
 
 
-                document.getElementById('or-product-subtotal').textContent = "RS " + subtotal.toFixed(2);
-                document.getElementById('orp-Shipping').textContent = "RS " + shipping.toFixed(2);
-                document.getElementById('or-total').textContent = "RS " + (subtotal + shipping).toFixed(2);
+                orBody.appendChild(newRow);
+            });
 
-                if (data.address_status) {
-                    const address = data.address;
-                    fname.value = address.user_id.first_name;
-                    lname.value = address.user_id.last_name;
-                    country.value = address.country_id.id;
-                    billingAddress.value = address.line_1;
-                    city.value = address.city;
-                    state.value = address.state;
-                    zipcode.value = address.post_code;
-                    phone.value = address.mobile;
-                    email.value = address.email;
-                    billingAddress2.value = address.billing_address2;
-                }
-            } else {
-                console.log("Error fetching data:", data.content);
-                erroeSwal("Error fetching data", data.content, "error");
+
+            document.getElementById('or-product-subtotal').textContent = "RS " + subtotal.toFixed(2);
+            document.getElementById('orp-Shipping').textContent = "RS " + shipping.toFixed(2);
+            document.getElementById('or-total').textContent = "RS " + (subtotal + shipping).toFixed(2);
+
+            if (data.address_status) {
+                const address = data.address;
+                fname.value = address.user_id.first_name;
+                lname.value = address.user_id.last_name;
+                country.value = address.country_id.id;
+                billingAddress.value = address.line_1;
+                city.value = address.city;
+                state.value = address.state;
+                zipcode.value = address.post_code;
+                phone.value = address.mobile;
+                email.value = address.email;
+                billingAddress2.value = address.billing_address2;
             }
         } else {
-
-            erroeSwal("Error", "Try aging!", "error");
+            console.log("Error fetching data:", data.content);
+            erroeSwal("Error fetching data", data.content, "error");
         }
-   
+    } else {
+
+        erroeSwal("Error", "Try aging!", "error");
+    }
+
 }
 
 function erroeSwal(title, text, type) {

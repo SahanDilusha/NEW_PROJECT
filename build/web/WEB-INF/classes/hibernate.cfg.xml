@@ -20,6 +20,9 @@
         <mapping class="entity.ReviewEntity"/>
         <mapping class="entity.ContryEntity"/>
         <mapping class="entity.AddressEntity"/>
+        <mapping class="entity.InvoiceStatus"/>
+        <mapping class="entity.InvoiceEntity"/>
+        <mapping class="entity.InvoiceItmeEntity"/>
         
     </session-factory>
 </hibernate-configuration>

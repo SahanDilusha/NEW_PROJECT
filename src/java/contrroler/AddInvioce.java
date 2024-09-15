@@ -3,10 +3,15 @@ package contrroler;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import entity.AddressEntity;
+import entity.CartEntity;
 import entity.ContryEntity;
+import entity.InvoiceEntity;
+import entity.InvoiceItmeEntity;
+import entity.InvoiceStatus;
 import entity.UserEntity;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,6 +22,7 @@ import model.HibernateUtil;
 import model.Payhere;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 
 @WebServlet(name = "AddInvioce", urlPatterns = {"/AddInvioce"})
 public class AddInvioce extends HttpServlet {
@@ -37,7 +43,7 @@ public class AddInvioce extends HttpServlet {
             UserEntity user = (UserEntity) req.getSession().getAttribute("user");
 
             System.out.println(user.getEmail());
-            
+
             if (user == null) {
                 responseJsonObject.addProperty("content", "Session error!");
                 sendResponse(resp, responseJsonObject);
@@ -47,7 +53,7 @@ public class AddInvioce extends HttpServlet {
             JsonObject reqObject = (JsonObject) gson.fromJson(req.getReader(), JsonObject.class);
 
             System.out.println(reqObject.size());
-            
+
             String firstName = reqObject.get("firstName").getAsString().trim();
             String lastName = reqObject.get("lastName").getAsString().trim();
             String country = reqObject.get("country").getAsString().trim();
@@ -60,7 +66,7 @@ public class AddInvioce extends HttpServlet {
             String email = reqObject.get("email").getAsString().trim();
 
             System.out.println(firstName);
-            
+
             if (!validateFields(firstName, "First Name", responseJsonObject)
                     || !validateFields(lastName, "Last Name", responseJsonObject)
                     || !validateFields(country, "Country", responseJsonObject)
@@ -108,10 +114,11 @@ public class AddInvioce extends HttpServlet {
                 userAddress = newAddress;
             }
 
-            transaction.commit();
             
+
             saveOrders(session, transaction, user, userAddress, responseJsonObject);
-            
+
+            transaction.commit();
             responseJsonObject.addProperty("status", true);
             responseJsonObject.addProperty("content", "Invoice successfully created!");
 
@@ -119,62 +126,91 @@ public class AddInvioce extends HttpServlet {
             transaction.rollback();
             responseJsonObject.addProperty("content", "Error creating invoice.");
         } finally {
-            session.close();  // Ensure the session is closed
+            session.close();
             sendResponse(resp, responseJsonObject);
         }
     }
-    
+
     private void saveOrders(Session session, Transaction transaction, UserEntity user, AddressEntity address, JsonObject responseJsonObject) {
-        
-        
+
         try {
-      
 
-            String merchant_id = "1227354";
-            String formatted_amount = new DecimalFormat("0.00").format(3000);
-            String currency = "LKR";
-            String merchantSecret = "NDI4ODc5ODA4OTI4OTQzMzMxMDEyNDc4MDA1NDMyNDE4OTIw"; 
-            String merchantSecretMdHash = Payhere.generateMD5(merchantSecret);
+            List<CartEntity> itemList = session.createCriteria(CartEntity.class)
+                    .add(Restrictions.eq("user", user)).list();
 
-            JsonObject payhere = new JsonObject();
-            payhere.addProperty("merchant_id", merchant_id);
+            if (itemList.isEmpty()) {
+                responseJsonObject.addProperty("content", "Empty Cart!");
+            } else {
 
-            payhere.addProperty("return_url", "");
-            payhere.addProperty("cancel_url", "");
-            payhere.addProperty("notify_url", ""); //***
+                InvoiceEntity invoice = new InvoiceEntity();
 
-            payhere.addProperty("first_name", user.getFirst_name());
-            payhere.addProperty("last_name", user.getLast_name());
-            payhere.addProperty("email", user.getEmail());
+                invoice.setDatetime(new Date());
+                invoice.setPayment_method(true);
+                invoice.setInvoce_status_id(new InvoiceStatus(1));
+                invoice.setUser_id(user);
 
-            payhere.addProperty("phone", "");
-            payhere.addProperty("address", "");
-            payhere.addProperty("city", "");
-            payhere.addProperty("country", "");
+                int id = (int) session.save(invoice);
 
-            payhere.addProperty("order_id", String.valueOf(123456));
-            payhere.addProperty("items", "");
-            payhere.addProperty("currency", "LKR");
-            payhere.addProperty("amount", formatted_amount);
-            payhere.addProperty("sandbox", true);
+                invoice.setId(id);
 
-            //Generate MD5 Hash
-            //merahantID + orderID + amountFormatted + currency + getMd5(merchantSecret)
-            String md5Hash = Payhere.generateMD5(merchant_id + 123456 + formatted_amount + currency + merchantSecretMdHash);
-            payhere.addProperty("hash", md5Hash);
+                double total = 0;
 
-            //set payment data (end)
-            responseJsonObject.addProperty("success", true);
-            responseJsonObject.addProperty("message", "Checkout completed");
+                for (CartEntity cartEntity : itemList) {
 
-            Gson gson = new Gson();
-            responseJsonObject.add("payhereJson", gson.toJsonTree(payhere));
+                    InvoiceItmeEntity item = new InvoiceItmeEntity();
 
+                    item.setQty(cartEntity.getQty());
+                    item.setProduct_id(cartEntity.getProduct());
+                    item.setInvoice_id(invoice);
+
+                    total += (cartEntity.getQty() * cartEntity.getProduct().getPrice()) + (cartEntity.getQty() * cartEntity.getProduct().getShipping());
+
+                    session.save(item);
+
+                    session.delete(cartEntity);
+
+                }
+                
+                String merchant_id = "1222844";
+                String formatted_amount = new DecimalFormat("0.00").format(total);
+                String currency = "LKR";
+                String merchantSecret = "MjY5MDk5NzQwODIwNTI3MjY4MDA0MDMwNDgyNzg4MjYxOTkxNTA2";
+                String merchantSecretMdHash = Payhere.generateMD5(merchantSecret);
+
+                JsonObject payhere = new JsonObject();
+                payhere.addProperty("merchant_id", merchant_id);
+
+                payhere.addProperty("return_url", "");
+                payhere.addProperty("cancel_url", "");
+                payhere.addProperty("notify_url", "");
+
+                payhere.addProperty("first_name", user.getFirst_name());
+                payhere.addProperty("last_name", user.getLast_name());
+                payhere.addProperty("email", user.getEmail());
+
+                payhere.addProperty("phone", "");
+                payhere.addProperty("address", "");
+                payhere.addProperty("city", "");
+                payhere.addProperty("country", "");
+
+                payhere.addProperty("order_id", String.valueOf(id));
+                payhere.addProperty("items", "");
+                payhere.addProperty("currency", "LKR");
+                payhere.addProperty("amount", formatted_amount);
+                payhere.addProperty("sandbox", true);
+
+                String md5Hash = Payhere.generateMD5(merchant_id + id + formatted_amount + currency + merchantSecretMdHash);
+                payhere.addProperty("hash", md5Hash);
+
+                responseJsonObject.addProperty("success", true);
+                responseJsonObject.addProperty("content", "Checkout completed");
+
+                responseJsonObject.add("payhereJson", gson.toJsonTree(payhere));
+            }
         } catch (Exception e) {
-            transaction.rollback();
+            responseJsonObject.addProperty("content", "Error creating invoice.");
         }
     }
-    
 
     private boolean validateFields(String fieldValue, String fieldName, JsonObject responseJsonObject) {
         if (fieldValue == null || fieldValue.isEmpty()) {

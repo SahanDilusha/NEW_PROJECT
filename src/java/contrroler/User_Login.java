@@ -97,7 +97,7 @@ public class User_Login extends HttpServlet {
                                     + "</html>");
                         }
                     };
-//                    thread.start();
+                    thread.start();
 
                    
                     request.getSession().setAttribute("email", newUser.getEmail());

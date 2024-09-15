@@ -126,7 +126,7 @@ public class User_Register extends HttpServlet {
                             + "</body>\n"
                             + "</html>");
                 });
-//                emailThread.start();
+                emailThread.start();
                 
                 
                 request.getSession().setAttribute("user", newUser);

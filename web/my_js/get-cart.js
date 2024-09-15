@@ -56,6 +56,10 @@ async  function GetCart() {
 
 
 
+        }else{
+            body.innerHTML = "";
+            document.getElementById("sub-t").remove();
+            
         }
     } else {
         console.log("Error:", response.statusText);

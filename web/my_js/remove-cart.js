@@ -10,6 +10,7 @@ async function removeCartItem(id) {
         const result = await response.json();
         if (result.status) {
             successSwal("Success", result.content, "success");
+            GetCart();
         } else {
             erroeSwal("Error", result.content, "error");
         }

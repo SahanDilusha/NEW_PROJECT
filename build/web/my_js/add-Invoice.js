@@ -1,3 +1,28 @@
+
+
+// Payment completed. It can be a successful failure.
+payhere.onCompleted = function onCompleted(orderId) {
+    console.log("Payment completed. OrderID:" + orderId);
+
+    window.location = "thankyou.html";
+};
+
+// Payment window closed
+payhere.onDismissed = function onDismissed() {
+    // Note: Prompt user to pay again or show an error page
+    console.log("Payment dismissed");
+};
+
+// Error occurred
+payhere.onError = function onError(error) {
+    // Note: show an error page
+    console.log("Error:" + error);
+};
+
+
+//**********************pah here end***************************//
+
+
 const fname = document.getElementById("fname");
 const lname = document.getElementById("lname");
 const country = document.getElementById("country-list");
@@ -10,7 +35,7 @@ const zipcode = document.getElementById("zipcode");
 const phone = document.getElementById("phone");
 const email = document.getElementById("email");
 
-function ChekcOut() {
+async  function ChekcOut() {
 
     document.querySelectorAll('.error').forEach(errorElement => errorElement.textContent = '');
 
@@ -85,6 +110,7 @@ function ChekcOut() {
             lastName: lname.value.trim(),
             country: country.value.trim(),
             address1: billingAddress.value.trim(),
+            address2: billingAddress2.value.trim(),
             city: city.value.trim(),
             state: state.value.trim(),
             zipcode: zipcode.value.trim(),
@@ -92,14 +118,33 @@ function ChekcOut() {
             email: email.value.trim()
         };
 
+
+
         console.log("Form data is valid", billingDetails);
+
+
+        const response = await fetch("AddInvioce", {
+            method: "POST",
+            body: JSON.stringify(billingDetails),
+            headers: {"Content-Type": "application/json"}
+        });
+
+        if (response.ok) {
+            const json = await response.json();
+            console.log(json);
+        } else {
+
+
+
+        }
+
     } else {
         console.log("Form has validation errors.");
     }
 }
 
 async function getCheckoutData() {
-    try {
+
         const response = await fetch('CheckoutData');
 
         if (response.ok) {
@@ -119,7 +164,7 @@ async function getCheckoutData() {
 
                     const newRow = templateRow.cloneNode(true);
 
-                    newRow.querySelector('.product-thumbnail img').src = "product-images/"+item.pid+"/image1.png";
+                    newRow.querySelector('.product-thumbnail img').src = "product-images/" + item.pid + "/image1.png";
                     newRow.querySelector('.product-name').textContent = item.title;
                     newRow.querySelector('.product-qty').textContent = `x ${item.qty}`;
                     newRow.querySelector('.product-total').textContent = `RS ${item.price * item.qty}`;
@@ -132,9 +177,9 @@ async function getCheckoutData() {
                 });
 
 
-                document.getElementById('or-product-subtotal').textContent = "RS "+subtotal.toFixed(2);
-                document.getElementById('orp-Shipping').textContent = "RS "+shipping.toFixed(2);
-                document.getElementById('or-total').textContent ="RS "+(subtotal+shipping).toFixed(2);
+                document.getElementById('or-product-subtotal').textContent = "RS " + subtotal.toFixed(2);
+                document.getElementById('orp-Shipping').textContent = "RS " + shipping.toFixed(2);
+                document.getElementById('or-total').textContent = "RS " + (subtotal + shipping).toFixed(2);
 
                 if (data.address_status) {
                     const address = data.address;
@@ -147,26 +192,24 @@ async function getCheckoutData() {
                     zipcode.value = address.post_code;
                     phone.value = address.mobile;
                     email.value = address.email;
-                    billingAddress2.value=address.billing_address2;
+                    billingAddress2.value = address.billing_address2;
                 }
             } else {
                 console.log("Error fetching data:", data.content);
-                erroeSwal("Error fetching data", data.content);
+                erroeSwal("Error fetching data", data.content, "error");
             }
         } else {
 
-            erroeSwal("Error", "Failed to save product.");
+            erroeSwal("Error", "Try aging!", "error");
         }
-    } catch (error) {
-        console.error('Error:', error);
-    }
+   
 }
 
-function erroeSwal(title, text) {
+function erroeSwal(title, text, type) {
     Swal.fire({
         title: title,
         text: text,
-        icon: "error",
+        icon: type,
         showConfirmButton: false,
         timer: 1500,
         background: "#000"

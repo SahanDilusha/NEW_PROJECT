@@ -10,21 +10,27 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "country")
-public class ContryEntity implements Serializable{
-    
+public class ContryEntity implements Serializable {
+
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)        
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    
-    @Column(name = "name",length = 45,nullable = false)
+
+    @Column(name = "name", length = 45, nullable = false)
     private String name;
-    
-    @Column(name = "satus",length = 3,nullable = false)
+
+    @Column(name = "satus", length = 3, nullable = false)
     private int satus;
-    
-    public ContryEntity(){
-    
+
+    public ContryEntity() {
+
+    }
+
+    public ContryEntity(int id) {
+        
+        this.id = id;
+        
     }
 
     public int getId() {
@@ -50,7 +56,5 @@ public class ContryEntity implements Serializable{
     public void setSatus(int satus) {
         this.satus = satus;
     }
-    
-    
-    
+
 }

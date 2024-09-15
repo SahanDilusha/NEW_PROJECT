@@ -1,6 +1,6 @@
 async  function getFilterData() {
     
-    const response = await fetch("RemoveCartItem", {
+    const response = await fetch("FilterData", {
         headers: {"Content-Type": "application/json"}
     });
 
@@ -9,6 +9,8 @@ async  function getFilterData() {
         const json = await response.json();
         
         console.log(json);
+        
+        
         
     }
     

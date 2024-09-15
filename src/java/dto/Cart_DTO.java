@@ -7,6 +7,14 @@ import java.io.Serializable;
 
 public class Cart_DTO implements Serializable {
 
+    public double getShipping() {
+        return shipping;
+    }
+
+    public void setShipping(double shipping) {
+        this.shipping = shipping;
+    }
+
     public double getPrice() {
         return price;
     }
@@ -43,6 +51,7 @@ public class Cart_DTO implements Serializable {
     private double qty;
     private String title;
     private double price;
+    private double shipping;
     
     
     public Cart_DTO() {

@@ -45,8 +45,9 @@ public class GetCart extends HttpServlet {
                         Cart_DTO cartDTO = new Cart_DTO();
                         cartDTO.setPid(cartEntity.getProduct().getId());
                         cartDTO.setQty(cartEntity.getQty());
-                        cartDTO.setTitle(cartEntity.getProduct().getTitile());  // Adjust with actual getter for title
-                        cartDTO.setPrice(cartEntity.getProduct().getPrice());   // Adjust with actual getter for price
+                        cartDTO.setShipping(cartEntity.getProduct().getShipping());
+                        cartDTO.setTitle(cartEntity.getProduct().getTitile());  
+                        cartDTO.setPrice(cartEntity.getProduct().getPrice());  
                         cartDTOs.add(cartDTO);
                     }
                     response_DTO.setContent(cartDTOs);
@@ -65,8 +66,9 @@ public class GetCart extends HttpServlet {
                         Cart_DTO cartDTO = new Cart_DTO();
                         cartDTO.setPid(cartItem.getProduct().getId());
                         cartDTO.setQty(cartItem.getQty());
-                        cartDTO.setTitle(cartItem.getProduct().getTitile());  // Adjust with actual getter for title
-                        cartDTO.setPrice(cartItem.getProduct().getPrice());   // Adjust with actual getter for price
+                        cartDTO.setTitle(cartItem.getProduct().getTitile()); 
+                        cartDTO.setPrice(cartItem.getProduct().getPrice());   
+                        cartDTO.setShipping(cartItem.getProduct().getShipping());
                         cartDTOs.add(cartDTO);
                     }
                     response_DTO.setContent(cartDTOs);

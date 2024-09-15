@@ -19,6 +19,7 @@
         <mapping class="entity.CartEntity"/>
         <mapping class="entity.ReviewEntity"/>
         <mapping class="entity.ContryEntity"/>
+        <mapping class="entity.AddressEntity"/>
         
     </session-factory>
 </hibernate-configuration>

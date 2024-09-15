@@ -20,7 +20,7 @@ public class ContryEntity implements Serializable{
     @Column(name = "name",length = 45,nullable = false)
     private String name;
     
-    @Column(name = "name",length = 3,nullable = false)
+    @Column(name = "satus",length = 3,nullable = false)
     private int satus;
     
     public ContryEntity(){

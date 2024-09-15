@@ -11,12 +11,13 @@
     <meta property="og:type" content="">
     <meta property="og:url" content="">
     <meta property="og:image" content="">
+    <link rel="stylesheet" href="assets/css/sweetalert2.min.css">
     <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/favicon.ico">
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/custom.css">
 </head>
 
-<body onload="getContrys();">
+<body onload="getContrys(); getCheckoutData();">
     <header class="header-area header-style-1 header-height-2">
         <div class="header-top header-top-ptb-1 d-none d-lg-block">
             <div class="container">
@@ -689,11 +690,11 @@
                         <form id="billingForm">
                             <div class="form-group">
                                 <input type="text" id="fname" required="" name="fname" placeholder="First name *">
-                                <small class="error" id="fnameError"></small>
+                                <small class="error text-danger" id="fnameError"></small>
                             </div>
                             <div class="form-group">
                                 <input type="text" id="lname" required="" name="lname" placeholder="Last name *">
-                                <small class="error" id="lnameError"></small>
+                                <small class="error text-danger" id="lnameError"></small>
                             </div>
                     
                             <div class="form-group">
@@ -702,37 +703,37 @@
                                         <option value="0">Select Country</option>
                                     </select>
                                 </div>
-                                <small class="error" id="countryError"></small>
+                                <small class="error text-danger" id="countryError"></small>
                             </div>
                             <div class="form-group">
                                 <input type="text" id="billing_address" name="billing_address" required="" placeholder="Address *">
-                                <small class="error" id="billingAddressError"></small>
+                                <small class="error text-danger" id="billingAddressError"></small>
                             </div>
                             <div class="form-group">
                                 <input type="text" id="billing_address2" name="billing_address2" required="" placeholder="Address line2">
                             </div>
                             <div class="form-group">
                                 <input required="" type="text" id="city" name="city" placeholder="City / Town *">
-                                <small class="error" id="cityError"></small>
+                                <small class="error text-danger" id="cityError"></small>
                             </div>
                             <div class="form-group">
                                 <input required="" type="text" id="state" name="state" placeholder="State / County *">
-                                <small class="error" id="stateError"></small>
+                                <small class="error text-danger" id="stateError"></small>
                             </div>
                             <div class="form-group">
                                 <input required="" type="text" id="zipcode" name="zipcode" placeholder="Postcode / ZIP *">
-                                <small class="error" id="zipcodeError"></small>
+                                <small class="error text-danger" id="zipcodeError"></small>
                             </div>
                             <div class="form-group">
                                 <input required="" type="text" id="phone" name="phone" placeholder="Phone *">
-                                <small class="error" id="phoneError"></small>
+                                <small class="error text-danger" id="phoneError"></small>
                             </div>
                             <div class="form-group">
                                 <input required="" type="text" id="email" name="email" placeholder="Email address *">
-                                <small class="error" id="emailError"></small>
+                                <small class="error text-danger" id="emailError"></small>
                             </div>
                         </form>
-                        <button type="button" onclick="validateForm()">Submit</button>
+    
                     </div>
                     
                     
@@ -795,7 +796,7 @@
                             </div>
                             <div class="bt-1 border-color-1 mt-30 mb-30"></div>
 
-                            <a href="#" class="btn btn-fill-out btn-block mt-30">Place Order</a>
+                            <button class="btn btn-fill-out btn-block mt-30" onclick="ChekcOut();">Place Order</button>
                         </div>
                     </div>
                 </div>
@@ -920,6 +921,7 @@
     </footer>
 
 
+    <script src="assets/js/sweetalert2.all.min.js"></script>
     <script src="my_js/get-contrys.js"></script>
     <script src="my_js/add-Invoice.js"></script>
 

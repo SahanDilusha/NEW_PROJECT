@@ -1,12 +1,13 @@
 package contrroler;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import dto.Cart_DTO;
 import dto.Response_DTO;
+import entity.AddressEntity;
 import entity.CartEntity;
 import entity.UserEntity;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -26,7 +27,7 @@ public class CheckoutData extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        Response_DTO response_DTO = new Response_DTO();
+        JsonObject response_DTO = new JsonObject();
         Gson gson = new Gson();
         Session session = HibernateUtil.getSessionFactory().openSession();
 
@@ -41,7 +42,7 @@ public class CheckoutData extends HttpServlet {
             List<CartEntity> cartList = criteria.list();
 
             if (cartList != null && !cartList.isEmpty()) {
-                
+
                 List<Cart_DTO> cartDTOs = new ArrayList<>();
                 for (CartEntity cartEntity : cartList) {
                     Cart_DTO cartDTO = new Cart_DTO();
@@ -52,20 +53,30 @@ public class CheckoutData extends HttpServlet {
                     cartDTO.setPrice(cartEntity.getProduct().getPrice());
                     cartDTOs.add(cartDTO);
                 }
-                response_DTO.setContent(cartDTOs);
-                
-                
-                
-                response_DTO.setStatus(true);
+                response_DTO.add("cart", gson.toJsonTree(cartDTOs));
+                response_DTO.addProperty("status", true);
+
+                AddressEntity address = (AddressEntity) session.createCriteria(AddressEntity.class)
+                        .add(Restrictions.eq("user_id", user))
+                        .add(Restrictions.eq("status", 1)).uniqueResult();
+
+                if (address != null) {
+                    response_DTO.add("address", gson.toJsonTree(address));
+                    response_DTO.addProperty("address_status", true);
+                } else {
+                    response_DTO.addProperty("address_status", false);
+                }
+
             } else {
-                response_DTO.setContent("Cart is empty");
+                response_DTO.addProperty("content", "Cart is empty");
             }
 
-        }else{
-        
-             response_DTO.setContent("Session is empty");
-            
+        } else {
+            response_DTO.addProperty("content", "Session is empty");
         }
+
+        resp.setContentType("application/json");
+        resp.getWriter().write(gson.toJson(response_DTO));
 
     }
 

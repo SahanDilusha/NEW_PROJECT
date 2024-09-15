@@ -27,6 +27,9 @@ public class AddressEntity implements Serializable {
 
     @Column(name = "mobile", length = 10, nullable = false)
     private String mobile;
+    
+    @Column(name = "email", length = 100, nullable = false)
+    private String email;
 
     @Column(name = "post_code", length = 10, nullable = false)
     private String post_code;
@@ -130,6 +133,14 @@ public class AddressEntity implements Serializable {
 
     public void setUser_id(UserEntity user_id) {
         this.user_id = user_id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
 }

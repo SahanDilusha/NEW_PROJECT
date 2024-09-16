@@ -41,6 +41,16 @@ public class GetProduct extends HttpServlet {
             criteria.add(Restrictions.not(Restrictions.eq("user", (UserEntity) req.getSession().getAttribute("user"))));
 
         }
+        
+        if (obj.has("text")) {
+
+            if (!obj.get("text").toString().equals("")) {
+
+                criteria.add(Restrictions.like("titile", obj.get("text").getAsString()+"%"));
+
+            }
+
+        }
 
         if (obj.has("category")) {
 
@@ -94,7 +104,7 @@ public class GetProduct extends HttpServlet {
 //        set product range
         int firstResult = obj.get("firstResult").getAsInt();
         criteria.setFirstResult(firstResult);
-        criteria.setMaxResults(2);
+        criteria.setMaxResults(6);
 
         List<ProductEntity> productlist = (List<ProductEntity>) criteria.list();
 

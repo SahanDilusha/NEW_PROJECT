@@ -94,7 +94,8 @@ async  function Filter(first) {
         price_range_start: document.getElementById("amount-min").value,
         price_range_end: document.getElementById("amount-max").value,
         firstResult: first,
-        sort_text: document.getElementById("sort_text").value
+        sort_text: document.getElementById("sort_text").value,
+        text:document.getElementById("s-text").value
     };
     
     document.getElementById("sort_text").onchange =()=>{
@@ -131,7 +132,7 @@ function updateProductView(json) {
     body.innerHTML = "";
     paginationMain.innerHTML = "";
 
-    const productPerPage = 2;
+    const productPerPage = 6;
     const totalPages = Math.ceil(json.allProductCount / productPerPage);
 
     json.productlist.forEach((item) => {

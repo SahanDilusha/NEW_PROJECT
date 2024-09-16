@@ -70,8 +70,10 @@ public class GetProduct extends HttpServlet {
         criteria.add(Restrictions.ge("price", startPrice));
         criteria.add(Restrictions.le("price", endPrice));
         
-        String sortText = responseJsonObject.get("sort_text").getAsString();
+        String sortText = obj.get("sort_text").getAsString();
 
+        
+        
         if (sortText.equals("1")) {
             criteria.addOrder(Order.desc("id"));
 
@@ -79,7 +81,7 @@ public class GetProduct extends HttpServlet {
             criteria.addOrder(Order.asc("id"));
 
         } else if (sortText.equals("3")) {
-            criteria.addOrder(Order.asc("title"));
+            criteria.addOrder(Order.asc("titile"));
 
         } else if (sortText.equals("4")) {
             criteria.addOrder(Order.asc("price"));

@@ -94,8 +94,14 @@ async  function Filter(first) {
         price_range_start: document.getElementById("amount-min").value,
         price_range_end: document.getElementById("amount-max").value,
         firstResult: first,
-        sort_text:document.getElementById("sort_text").value
+        sort_text: document.getElementById("sort_text").value
     };
+    
+    document.getElementById("sort_text").onchange =()=>{
+        Filter(first);
+    };
+    
+    console.log(dto);
 
     const response = await fetch("GetProduct", {
         method: "POST",

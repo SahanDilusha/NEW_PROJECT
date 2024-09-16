@@ -89,11 +89,24 @@ async  function getFilterData() {
 const body = document.getElementById("item-body");
 const PItem = document.getElementById("p-item");
 
-body.innerHTML = "";
+
 
 async  function Filter() {
 
+    body.innerHTML = "";
+
+    const dto = {
+        category: categoryId,
+        subcategory: subcategoryId,
+        brand: brandId,
+        price_range_start: document.getElementById("amount-min").value,
+        price_range_end: document.getElementById("amount-max").value
+
+    };
+
     const response = await fetch("GetProduct", {
+        method: "POST",
+        body: JSON.stringify(dto),
         headers: {"Content-Type": "application/json"}
     });
 

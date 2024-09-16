@@ -23,6 +23,10 @@ public class BrandEntity implements Serializable{
     public BrandEntity(){
     
     }
+    
+    public BrandEntity(int id){
+        this.id = id;
+    }
 
     public int getId() {
         return id;

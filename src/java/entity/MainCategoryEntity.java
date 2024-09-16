@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "main_category")
-public class MainCategoryEntity implements Serializable{
+public class MainCategoryEntity implements Serializable {
 
     @Id
     @Column(name = "id")
@@ -19,9 +19,13 @@ public class MainCategoryEntity implements Serializable{
 
     @Column(name = "name", length = 45, nullable = false)
     private String name;
-    
-    public MainCategoryEntity(){
-    
+
+    public MainCategoryEntity() {
+
+    }
+
+    public MainCategoryEntity(int id) {
+        this.id = id;
     }
 
     public int getId() {
@@ -39,7 +43,5 @@ public class MainCategoryEntity implements Serializable{
     public void setName(String name) {
         this.name = name;
     }
-    
-    
 
 }

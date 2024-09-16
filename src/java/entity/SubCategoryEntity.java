@@ -30,6 +30,10 @@ public class SubCategoryEntity implements Serializable {
 
     }
 
+    public SubCategoryEntity(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }

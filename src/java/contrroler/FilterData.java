@@ -32,14 +32,14 @@ public class FilterData extends HttpServlet {
 
             List<BrandEntity> barndList = (List<BrandEntity>) session.createCriteria(BrandEntity.class).list();
 
-            List<MainCategoryEntity> mainCList = (List<MainCategoryEntity>) session.createCriteria(BrandEntity.class).list();
+            List<MainCategoryEntity> mainCList = (List<MainCategoryEntity>) session.createCriteria(MainCategoryEntity.class).list();
 
             List<SubCategoryEntity> subCList = (List<SubCategoryEntity>) session.createCriteria(SubCategoryEntity.class).list();
 
             List<ConditionEntity> conditionCList = (List<ConditionEntity>) session.createCriteria(ConditionEntity.class).list();
 
             responseObject.add("barnd", gson.toJsonTree(barndList));
-            responseObject.add("main", gson.toJsonTree(barndList));
+            responseObject.add("main", gson.toJsonTree(mainCList));
             responseObject.add("sub", gson.toJsonTree(subCList));
             responseObject.add("condition", gson.toJsonTree(conditionCList));
 

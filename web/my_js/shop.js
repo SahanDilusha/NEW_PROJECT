@@ -93,7 +93,8 @@ async  function Filter(first) {
         brand: brandId,
         price_range_start: document.getElementById("amount-min").value,
         price_range_end: document.getElementById("amount-max").value,
-        firstResult: first
+        firstResult: first,
+        sort_text:document.getElementById("sort_text").value
     };
 
     const response = await fetch("GetProduct", {

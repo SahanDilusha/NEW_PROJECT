@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.HibernateUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 @WebServlet(name = "GetProduct", urlPatterns = {"/GetProduct"})
@@ -68,6 +69,22 @@ public class GetProduct extends HttpServlet {
 
         criteria.add(Restrictions.ge("price", startPrice));
         criteria.add(Restrictions.le("price", endPrice));
+        
+        String sortText = responseJsonObject.get("sort_text").getAsString();
+
+        if (sortText.equals("1")) {
+            criteria.addOrder(Order.desc("id"));
+
+        } else if (sortText.equals("2")) {
+            criteria.addOrder(Order.asc("id"));
+
+        } else if (sortText.equals("3")) {
+            criteria.addOrder(Order.asc("title"));
+
+        } else if (sortText.equals("4")) {
+            criteria.addOrder(Order.asc("price"));
+
+        }
 
         //get all product count
         responseJsonObject.addProperty("allProductCount", criteria.list().size());

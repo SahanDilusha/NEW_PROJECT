@@ -22,7 +22,7 @@ async  function getFilterData() {
             subcategoryId = 0;
             Filter();
         };
-        
+
         document.getElementById("b-all").onclick = () => {
             brandId = 0;
             Filter();
@@ -34,7 +34,7 @@ async  function getFilterData() {
             element.textContent = items.name;
 
             element.onclick = () => {
-          
+
                 categoryId = items.id;
                 Filter();
             };
@@ -50,7 +50,7 @@ async  function getFilterData() {
                     element2.style = "color:red";
 
                     element2.onclick = () => {
- 
+
                         subcategoryId = items.id;
                         Filter();
                     };
@@ -62,11 +62,20 @@ async  function getFilterData() {
             });
 
         });
-        
-        json.barnd.forEach((item)=>{
-            
-            
-            
+
+        json.barnd.forEach((item) => {
+
+            let element2 = document.createElement("li");
+            element2.textContent = item.name;
+
+            element2.onclick = () => {
+
+                brandId = item.id;
+                Filter();
+            };
+
+            barnds.appendChild(element2);
+
         });
 
 
@@ -77,6 +86,44 @@ async  function getFilterData() {
 
 }
 
-function Filter() {
+const body = document.getElementById("item-body");
+const PItem = document.getElementById("p-item");
+
+body.innerHTML = "";
+
+async  function Filter() {
+
+    const response = await fetch("GetProduct", {
+        headers: {"Content-Type": "application/json"}
+    });
+
+    if (response.ok) {
+
+        const json = await response.json();
+
+        console.log(json);
+
+        json.forEach((item) => {
+
+            let clone = PItem.cloneNode(true);
+
+            clone.querySelector("#ppri").textContent = "RS " + item.price;
+            clone.querySelector("#pt").textContent = item.titile;
+            clone.querySelector("#pb").textContent = item.barnd.name;
+
+            clone.querySelector("#pim1").src = "product-images/" + item.id + "/image1.png";
+            clone.querySelector("#pim2").src = "product-images/" + item.id + "/image2.png";
+
+
+            clone.onclick = () => {
+                window.location = "product-details.html?id=" + item.id;
+            };
+
+
+            body.appendChild(clone);
+
+        });
+
+    }
 
 }

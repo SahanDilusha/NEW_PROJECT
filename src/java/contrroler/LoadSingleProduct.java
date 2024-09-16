@@ -33,22 +33,29 @@ public class LoadSingleProduct extends HttpServlet {
 
 //            ProductEntity product = (ProductEntity) session.get(ProductEntity.class, 10);
             JsonObject object = new JsonObject();
-            object.add("product", gson.toJsonTree(new ProductDTO(
-                    product.getId(),
-                    product.getTitile(),
-                    product.getDescription(),
-                    product.getQty(),
-                    product.getBarnd().getName(),
-                    product.getMainCategory().getName(),
-                    product.getSubCategory().getName(),
-                    product.getCondition_id().getName(),
-                    product.getShipping(),
-                    product.getPrice(),
-                    product.getProductSatus().getId(),
-                    product.getProductSatus().getName(),
-                    product.getDate(),
-                    product.getRateit() >= 100 ? 0.5 : product.getRateit() >= 500 ? 3 : product.getRateit() >= 1000 ? 4 : 5)));
+            if (product != null) {
 
+                object.add("product", gson.toJsonTree(new ProductDTO(
+                        product.getId(),
+                        product.getTitile(),
+                        product.getDescription(),
+                        product.getQty(),
+                        product.getBarnd().getName(),
+                        product.getMainCategory().getName(),
+                        product.getSubCategory().getName(),
+                        product.getCondition_id().getName(),
+                        product.getShipping(),
+                        product.getPrice(),
+                        product.getProductSatus().getId(),
+                        product.getProductSatus().getName(),
+                        product.getDate(),
+                        product.getRateit() >= 100 ? 0.5 : product.getRateit() >= 500 ? 3 : product.getRateit() >= 1000 ? 4 : 5)));
+
+                object.addProperty("status", true);
+
+            } else {
+                object.addProperty("status", false);
+            }
             resp.setContentType("application/json");
             resp.getWriter().write(gson.toJson(object));
             System.out.println(gson.toJson(object));

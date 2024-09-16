@@ -129,8 +129,6 @@ var currentPage = 0;
 
 function updateProductView(json) {
 
-
-
     body.innerHTML = "";
     paginationMain.innerHTML = "";
 

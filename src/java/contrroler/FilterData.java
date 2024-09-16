@@ -49,7 +49,7 @@ public class FilterData extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            session.close();
+//            session.close();
         }
 
     }

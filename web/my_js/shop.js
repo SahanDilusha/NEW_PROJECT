@@ -20,12 +20,12 @@ async  function getFilterData() {
         document.getElementById("c-all").onclick = () => {
             categoryId = 0;
             subcategoryId = 0;
-            Filter();
+            Filter(0);
         };
 
         document.getElementById("b-all").onclick = () => {
             brandId = 0;
-            Filter();
+            Filter(0);
         };
 
         json.main.forEach((items) => {
@@ -36,7 +36,7 @@ async  function getFilterData() {
             element.onclick = () => {
 
                 categoryId = items.id;
-                Filter();
+                Filter(0);
             };
 
             category.appendChild(element);
@@ -52,7 +52,7 @@ async  function getFilterData() {
                     element2.onclick = () => {
 
                         subcategoryId = items.id;
-                        Filter();
+                        Filter(0);
                     };
 
                     category.appendChild(element2);
@@ -71,7 +71,7 @@ async  function getFilterData() {
             element2.onclick = () => {
 
                 brandId = item.id;
-                Filter();
+                Filter(0);
             };
 
             barnds.appendChild(element2);
@@ -95,13 +95,13 @@ async  function Filter(first) {
         price_range_end: document.getElementById("amount-max").value,
         firstResult: first,
         sort_text: document.getElementById("sort_text").value,
-        text:document.getElementById("s-text").value
+        text: document.getElementById("s-text").value
     };
-    
-    document.getElementById("sort_text").onchange =()=>{
+
+    document.getElementById("sort_text").onchange = () => {
         Filter(first);
     };
-    
+
     console.log(dto);
 
     const response = await fetch("GetProduct", {
@@ -129,8 +129,18 @@ var currentPage = 0;
 
 function updateProductView(json) {
 
+
+
     body.innerHTML = "";
     paginationMain.innerHTML = "";
+
+    if (json.allProductCount == 0) {
+
+        const at = document.createElement("h1");
+        at.textContent = "Product not found!";
+        body.appendChild(at);
+        return;
+    }
 
     const productPerPage = 6;
     const totalPages = Math.ceil(json.allProductCount / productPerPage);

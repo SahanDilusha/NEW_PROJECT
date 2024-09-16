@@ -22,12 +22,14 @@ import org.hibernate.criterion.Restrictions;
 @WebServlet(name = "GetProduct", urlPatterns = {"/GetProduct"})
 public class GetProduct extends HttpServlet {
 
-    private final Gson gson = new Gson();
-
-    Session session = HibernateUtil.getSessionFactory().openSession();
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        Gson gson = new Gson();
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        JsonObject responseJsonObject = new JsonObject();
 
         JsonObject obj = gson.fromJson(req.getReader(), JsonObject.class);
 
@@ -60,21 +62,31 @@ public class GetProduct extends HttpServlet {
                 criteria.add(Restrictions.eq("barnd", new BrandEntity(Integer.parseInt(obj.get("brand").toString()))));
             }
         }
-        
+
         double startPrice = obj.get("price_range_start").getAsDouble();
         double endPrice = obj.get("price_range_end").getAsDouble();
 
         criteria.add(Restrictions.ge("price", startPrice));
         criteria.add(Restrictions.le("price", endPrice));
-        
-        List<ProductEntity> productlist = (List<ProductEntity>)criteria.list();
-        
-        for (ProductEntity product :productlist) {
+
+        //get all product count
+        responseJsonObject.addProperty("allProductCount", criteria.list().size());
+
+//        set product range
+        int firstResult = obj.get("firstResult").getAsInt();
+        criteria.setFirstResult(firstResult);
+        criteria.setMaxResults(2);
+
+        List<ProductEntity> productlist = (List<ProductEntity>) criteria.list();
+
+        for (ProductEntity product : productlist) {
             product.setUser(null);
         }
-        
+
+        responseJsonObject.add("productlist", gson.toJsonTree(productlist));
+
         resp.setContentType("application/json");
-        resp.getWriter().write(gson.toJson(productlist));
+        resp.getWriter().write(gson.toJson(responseJsonObject));
 
     }
 

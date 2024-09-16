@@ -17,7 +17,7 @@
 
 </head>
 
-<body onload="getFilterData(); Filter();">
+<body onload="getFilterData(); Filter(0);">
     <header class="header-area header-style-1 header-height-2">
         <div class="header-top header-top-ptb-1 d-none d-lg-block">
             <div class="container">
@@ -697,7 +697,7 @@
                         <div class="row product-grid-3" id="item-body">
                             <div class="col-lg-4 col-md-4 col-6 col-sm-6" id="p-item">
 
-                                <div class="product-cart-wrap mb-30" >
+                                <div class="product-cart-wrap mb-30">
                                     <div class="product-img-action-wrap">
                                         <div class="product-img product-img-zoom">
                                             <a>
@@ -734,14 +734,9 @@
                         <!--pagination-->
                         <div class="pagination-area mt-15 mb-sm-5 mb-lg-0">
                             <nav aria-label="Page navigation example">
-                                <ul class="pagination justify-content-start">
-                                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">02</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">03</a></li>
-                                    <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">16</a></li>
-                                    <li class="page-item"><a class="page-link" href="#"><i
-                                                class="fi-rs-angle-double-small-right"></i></a></li>
+                                <ul class="pagination justify-content-start" id="pagination" >
+                                    <li class="page-item" id="pg-btn"><a id="pga" class="page-link" href="#" role="button" type="button"></a></li>
+                                   
                                 </ul>
                             </nav>
                         </div>
@@ -777,75 +772,25 @@
                                 <span>Range:</span>
                                 <div class="d-flex mt-10">
                                     <span>RS </span>
-                                    <input type="number" id="amount-min" name="price" placeholder="Min Price" min="0" max="1000000" value="0">
+                                    <input type="number" id="amount-min" name="price" placeholder="Min Price" min="0"
+                                        max="1000000" value="0">
                                     <span>RS </span>
-                                    <input type="number" id="amount-max" name="price-max" placeholder="Max Price" min="0" max="1000000" value="1000000">
+                                    <input type="number" id="amount-max" name="price-max" placeholder="Max Price"
+                                        min="0" max="1000000" value="1000000">
                                 </div>
                             </div>
 
-                            <button class="btn bg-dark text-white mt-100" onclick="window.location ='shop.html'" type="submit">Rest</button>
+                            <button class="btn bg-dark text-white mt-100" onclick="window.location ='shop.html'"
+                                type="submit">Rest</button>
 
                         </div>
 
-                        
+
 
                     </div>
 
                 </div>
-                <!-- Product sidebar Widget -->
-                <div class="sidebar-widget product-sidebar  mb-30 p-30 bg-grey border-radius-10">
-                    <div class="widget-header position-relative mb-20 pb-10">
-                        <h5 class="widget-title mb-10">New products</h5>
-                        <div class="bt-1 border-color-1"></div>
-                    </div>
-                    <div class="single-post clearfix">
-                        <div class="image">
-                            <img src="assets/imgs/shop/thumbnail-3.jpg" alt="#">
-                        </div>
-                        <div class="content pt-10">
-                            <h5><a href="product-details.html">Chen Cardigan</a></h5>
-                            <p class="price mb-0 mt-5">$99.50</p>
-                            <div class="product-rate">
-                                <div class="product-rating" style="width:90%"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-post clearfix">
-                        <div class="image">
-                            <img src="assets/imgs/shop/thumbnail-4.jpg" alt="#">
-                        </div>
-                        <div class="content pt-10">
-                            <h6><a href="product-details.html">Chen Sweater</a></h6>
-                            <p class="price mb-0 mt-5">$89.50</p>
-                            <div class="product-rate">
-                                <div class="product-rating" style="width:80%"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-post clearfix">
-                        <div class="image">
-                            <img src="assets/imgs/shop/thumbnail-5.jpg" alt="#">
-                        </div>
-                        <div class="content pt-10">
-                            <h6><a href="product-details.html">Colorful Jacket</a></h6>
-                            <p class="price mb-0 mt-5">$25</p>
-                            <div class="product-rate">
-                                <div class="product-rating" style="width:60%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="banner-img wow fadeIn mb-45 animated d-lg-block d-none">
-                    <img src="assets/imgs/banner/banner-11.jpg" alt="">
-                    <div class="banner-text">
-                        <span>Women Zone</span>
-                        <h4>Save 17% on <br>Office Dress</h4>
-                        <a href="shop.html">Shop Now <i class="fi-rs-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
-            </div>
-            </div>
+
         </section>
     </main>
     <footer class="main">
@@ -967,7 +912,7 @@
     <script src="my_js/shop.js"></script>
 
     <!-- jQuery -->
- 
+
 
     <!-- Vendor JS-->
     <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
